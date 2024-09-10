@@ -5,10 +5,10 @@ const API_URL_TODO= 'https://playground.4geeks.com/todo/todos';
 
 export function Tasks(){
     const [task, setTask]=useState([])
-	console.log(task)
 	const [inputTask, setInputTask]= useState('')
 	const [visibleIndex, setVisibleIndex]= useState('none')
 	
+useEffect(()=>{
 	function getApi(){
 		fetch(API_URL).then(response=>{
 			if(response.ok){
@@ -21,6 +21,9 @@ export function Tasks(){
 		}))
 		.catch(error=>console.error('Erorr: ', error));
 	}
+	getApi()
+},[])
+	
 	function createUser(){
 		fetch(API_URL,{
 			method: 'POST',
@@ -30,7 +33,7 @@ export function Tasks(){
 		.then(()=>getApi())
 		.catch(error=>console.log(`Error: ` , error));
 	}
-	useEffect(()=>{getApi()},[]);
+	
 
 	function captureTask(e){
 		setInputTask(e.target.value)
