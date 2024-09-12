@@ -51,17 +51,14 @@ useEffect(()=>{
 			body: JSON.stringify(taskToSend),
 		  })
 		  .then(resp => {
-			  console.log(resp.ok); // Será true si la respuesta es exitosa
-			  console.log(resp.status); // El código de estado 200, 300, 400, etc.
-			  return resp.json(); // Intentará parsear el resultado a JSON y retornará una promesa donde puedes usar .then para seguir con la lógica
+			  return resp.json();
 		  })
 		  .then(data => {
 			  setInputTask('');
 			  setTask(prevTask => [...prevTask, data]);
-			  console.log( `La data es: `,data); // Esto imprimirá en la consola el objeto exacto recibido del servidor
+			  console.log( `La data es: `,data);
 		  })
 		  .catch(error => {
-			  // Manejo de errores
 			  console.log(error);
 		  });
 	}
@@ -84,7 +81,6 @@ useEffect(()=>{
 				return data; 
 			} else {
 				console.log('error: ', response.status, response.statusText);
-				/* Realiaza el tratamiento del error que devolvió el request HTTP */
 				return {error: {status: response.status, statusText: response.statusText}};
 			}
 		}
