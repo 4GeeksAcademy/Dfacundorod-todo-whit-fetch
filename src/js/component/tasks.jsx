@@ -8,7 +8,7 @@ export function Tasks(){
 	const [inputTask, setInputTask]= useState('')
 	const [visibleIndex, setVisibleIndex]= useState('none')
 	
-useEffect(()=>{
+
 	function getApi(){
 		fetch(API_URL).then(response=>{
 			if(response.ok){
@@ -21,8 +21,6 @@ useEffect(()=>{
 		}))
 		.catch(error=>console.error('Erorr: ', error));
 	}
-	getApi()
-},[])
 	
 	function createUser(){
 		fetch(API_URL,{
@@ -33,6 +31,7 @@ useEffect(()=>{
 		.then(()=>getApi())
 		.catch(error=>console.log(`Error: ` , error));
 	}
+	useEffect(()=>{getApi()},[])
 	
 
 	function captureTask(e){
@@ -55,7 +54,7 @@ useEffect(()=>{
 		  })
 		  .then(data => {
 			  setInputTask('');
-			  setTask(prevTask => [...prevTask, data]);
+			  getApi();
 			  console.log( `La data es: `,data);
 		  })
 		  .catch(error => {
@@ -65,8 +64,9 @@ useEffect(()=>{
 
 	function deleteTask(index){
 		const incompleteTasks= task.filter((_,taskIndex)=> taskIndex!==index);
-		setTask(incompleteTasks);
+		setTask(incompleteTasks)
 		deleteTaskApi(index);
+		
 	}
 
 	async function deleteTaskApi(index){
@@ -84,20 +84,21 @@ useEffect(()=>{
 				return {error: {status: response.status, statusText: response.statusText}};
 			}
 		}
+		getApi()
 	};
 
-	function deleteAll(){
-		task.forEach((task)=>{
+	async function deleteAll(){
+		const toDelete = task.forEach((task)=>{
 			fetch(API_URL_TODO+`/${task.id}`,{
 				method:'DELETE',
 			})
 			.then(response => {
-				if(response.ok){console.log(response)}
+				if(response.ok){console.log(response); getApi();}
 				else {console.log(response.status)}
 			})
 			.catch(error => console.error(`El error: `, error))
 		})
-		setTask([]);
+		
 	}
  
 	return (
